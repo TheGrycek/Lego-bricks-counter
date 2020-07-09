@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import json
 import os
+import argparse
 
 def flash(img_kolor):
 
@@ -220,10 +221,25 @@ input_path = input("Enter input file path:")
 output_path = input("Enter output file path:")
 imgs_path = input("Enter images file path:")
 
+'''
+parser = argparse.ArgumentParser(description='Paths to run')
+parser.add_argument('images_dir', type=str, help='Path to images')
+parser.add_argument('input_dir', type=str, help='Path to json file')
+parser.add_argument('output_dir', type=str, help='Path to output file')
+args = parser.parse_args()
+
+input_dir = str(args.input_dir)
+images_dir = str(args.images_dir)
+output_dir = str(args.output_dir)
+
+'''
+
 def main():
 
     output = []
 
+
+    #with open(input_dir) as json_file:
     with open(input_path) as json_file:
         data = json.load(json_file)
 
@@ -235,6 +251,7 @@ def main():
 
         for name in imgs_names:
             img = cv2.imread(f'{imgs_path}\{name}.jpg', 1)
+	    #img = cv2.imread(images_dir + '/' + name + '.jpg', 1)
             img_white = img
 
             input = np.zeros([int(len(data[name])), 5], dtype=int)
@@ -362,6 +379,8 @@ def main():
         x = dict(zip(imgs_names, output))
 
         #print(x)
+
+        #with open(output_dir, 'w') as q:
         with open(output_path, 'w') as q:
             json.dump(x, q, default=change_type)
 
